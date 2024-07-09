@@ -1,0 +1,68 @@
+<div
+  tabindex="0"
+  class="frame"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  (click)="popupIsOpen() ? closePopup() : openPopup()"
+>
+  <div class="label" [class.small]="!filterAll()">Attribut-Filter</div>
+  @if (!filterAll()) {
+  <div class="content">{{ selection() }}</div>
+  }
+  <mat-icon class="arrow">arrow_drop_down</mat-icon>
+</div>
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="popupIsOpen()"
+  [cdkConnectedOverlayPositions]="[
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'top',
+    },
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'top',
+    },
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'bottom',
+    },
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'bottom',
+    },
+  ]"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+  (backdropClick)="closePopup()"
+>
+  <div class="popup">
+    @if (isLoading()) {
+    <div class="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+    } @else {
+    <button mat-button (click)="selectAll()">Alle</button>
+    <button mat-button (click)="selectNone()">Keine</button>
+    <mat-divider></mat-divider>
+    <div class="selection-list">
+      @for (attribute of this.attributes(); track attribute.id) {
+      <mat-checkbox
+        [checked]="attribute.selected"
+        (change)="selectionChanged(attribute.id, $event.checked)"
+        >{{ attribute.name }}</mat-checkbox
+      >
+      }
+    </div>
+    }
+  </div>
+</ng-template>

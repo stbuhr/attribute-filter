@@ -1,0 +1,81 @@
+:host {
+  --min-control-width: 240px;
+
+  display: block;
+  color: var(--mdc-filled-text-field-label-text-color);
+  max-width: var(--min-control-width);
+}
+
+.frame {
+  display: grid;
+  gap: 0 1rem;
+  grid-template-columns: 1fr auto;
+  background-color: var(--mdc-filled-text-field-container-color);
+  padding: 0.3rem 0.3rem 0.3rem 1rem;
+  border-top-left-radius: var(--mdc-filled-text-field-container-shape);
+  border-top-right-radius: var(--mdc-filled-text-field-container-shape);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid var(--mdc-filled-text-field-label-text-color);
+  cursor: pointer;
+  outline: none;
+}
+
+.frame:focus {
+  border-bottom-color: var(--mdc-filled-text-field-focus-label-text-color);
+  border-bottom-width: 2px;
+  .small {
+    color: var(--mdc-filled-text-field-focus-label-text-color);
+  }
+}
+
+.frame:hover {
+  background-color: var(--control-hover-background-color);
+}
+
+.label {
+  grid-column: 1;
+  color: var(--label-color);
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.small {
+  margin-top: -2px;
+  margin-bottom: 4px;
+  font-size: 16px;
+  transform: matrix(0.75, 0, 0, 0.75, 0, 4);
+  transform-origin: 0px 0px;
+}
+
+.content {
+  grid-column: 1;
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.popup {
+  background-color: var(--mat-datepicker-calendar-container-background-color);
+  border-radius: 0 0 4px 4px;
+  padding: 0 0.5rem;
+  box-shadow: var(--mat-datepicker-calendar-container-elevation-shadow);
+  min-width: var(--min-control-width);
+}
+
+.selection-list {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+}
+
+.loading {
+  padding: 1rem;
+}
