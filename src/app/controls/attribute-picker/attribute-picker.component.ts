@@ -35,11 +35,12 @@ export class AttributePickerComponent {
   attributePickerService = inject(AttributePickerService);
 
   popupIsOpen = signal(false);
-  filterAll = signal(false);
 
   selection = this.attributePickerService.selection;
   isLoading = this.attributePickerService.isLoading;
   attributes = this.attributePickerService.attributes;
+  all = this.attributePickerService.all;
+  none = this.attributePickerService.none;
 
   constructor() {
     this.attributePickerService.loadAttributes();
@@ -57,7 +58,11 @@ export class AttributePickerComponent {
     this.attributePickerService.selectAttribute(attributeId, checked);
   }
 
-  selectAll() {}
+  selectAll() {
+    this.attributePickerService.selectAll();
+  }
 
-  selectNone() {}
+  selectNone() {
+    this.attributePickerService.selectNone();
+  }
 }

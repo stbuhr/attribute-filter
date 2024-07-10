@@ -5,8 +5,8 @@
   #trigger="cdkOverlayOrigin"
   (click)="popupIsOpen() ? closePopup() : openPopup()"
 >
-  <div class="label" [class.small]="!filterAll()">Attribut-Filter</div>
-  @if (!filterAll()) {
+  <div class="label" [class.small]="!all()">Attribut-Filter</div>
+  @if (!all()) {
   <div class="content">{{ selection() }}</div>
   }
   <mat-icon class="arrow">arrow_drop_down</mat-icon>
@@ -58,6 +58,7 @@
       @for (attribute of this.attributes(); track attribute.id) {
       <mat-checkbox
         [checked]="attribute.selected"
+        [disabled]="attribute.id === '' && none()"
         (change)="selectionChanged(attribute.id, $event.checked)"
         >{{ attribute.name }}</mat-checkbox
       >

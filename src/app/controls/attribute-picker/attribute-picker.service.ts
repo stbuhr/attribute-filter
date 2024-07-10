@@ -28,6 +28,8 @@ export interface AttributePickerState {
   error: string | null;
 }
 
+const NO_ATTRIBUTE = { id: '', name: '- Kein Attribut -', selected: true };
+
 @Injectable({
   providedIn: 'root',
 })
@@ -52,6 +54,12 @@ export class AttributePickerService {
       .attributes.filter((a) => a.selected)
       .map((a) => a.name)
       .join(', ')
+  );
+  all = computed(() => this.state().attributes.every((a) => a.selected));
+  none = computed(() =>
+    this.state().attributes.every(
+      (a) => a.id === NO_ATTRIBUTE.id || !a.selected
+    )
   );
 
   private loadedAttributesSubject = new Subject<void>();
@@ -83,7 +91,10 @@ export class AttributePickerService {
   private setAttributes(atts: AttributeDto[]) {
     this.state.update((state) => ({
       ...state,
-      attributes: atts.map((a) => ({ id: a.id, name: a.name, selected: true })),
+      attributes: [
+        NO_ATTRIBUTE,
+        ...atts.map((a) => ({ id: a.id, name: a.name, selected: true })),
+      ],
       isLoading: false,
     }));
   }
@@ -99,11 +110,41 @@ export class AttributePickerService {
   }
 
   selectAttribute(attributeId: string, selected: boolean) {
+    this.state.update((state) => {
+      const none =
+        selected || attributeId === NO_ATTRIBUTE.id
+          ? false
+          : state.attributes.every((a) =>
+              a.id == attributeId ? selected : !a.selected
+            );
+      console.log('none', none);
+      return {
+        ...state,
+        attributes: state.attributes.map((a) =>
+          a.id === NO_ATTRIBUTE.id && none
+            ? { ...a, selected: true }
+            : a.id === attributeId
+            ? { ...a, selected }
+            : a
+        ),
+      };
+    });
+  }
+
+  selectAll() {
     this.state.update((state) => ({
       ...state,
-      attributes: state.attributes.map((a) =>
-        a.id === attributeId ? { ...a, selected } : a
-      ),
+      attributes: state.attributes.map((a) => ({ ...a, selected: true })),
+    }));
+  }
+
+  selectNone() {
+    this.state.update((state) => ({
+      ...state,
+      attributes: state.attributes.map((a) => ({
+        ...a,
+        selected: a.id === NO_ATTRIBUTE.id,
+      })),
     }));
   }
 }
