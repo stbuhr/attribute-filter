@@ -1,15 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  catchError,
-  delay,
-  Observable,
-  of,
-  Subject,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { catchError, Observable, of, Subject, switchMap, tap } from 'rxjs';
 
 export interface AttributeDto {
   id: string;
@@ -110,25 +102,24 @@ export class AttributePickerService {
   }
 
   selectAttribute(attributeId: string, selected: boolean) {
-    this.state.update((state) => {
-      const none =
-        selected || attributeId === NO_ATTRIBUTE.id
-          ? false
-          : state.attributes.every((a) =>
-              a.id == attributeId ? selected : !a.selected
-            );
-      console.log('none', none);
-      return {
-        ...state,
-        attributes: state.attributes.map((a) =>
-          a.id === NO_ATTRIBUTE.id && none
-            ? { ...a, selected: true }
-            : a.id === attributeId
-            ? { ...a, selected }
-            : a
-        ),
-      };
-    });
+    this.state.update((state) => ({
+      ...state,
+      attributes: state.attributes.map((a) => {
+        if (
+          a.id === NO_ATTRIBUTE.id &&
+          !selected &&
+          state.attributes
+            .filter((a) => a.id !== attributeId)
+            .every((a) => !a.selected)
+        ) {
+          return { ...a, selected: true };
+        } else if (a.id === attributeId) {
+          return { ...a, selected };
+        } else {
+          return a;
+        }
+      }),
+    }));
   }
 
   selectAll() {

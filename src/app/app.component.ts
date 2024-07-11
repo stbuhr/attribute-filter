@@ -23,5 +23,7 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'attribute-filter';
+  selectedAttributesChanged($event: string[]) {
+    console.log('Selected attributes changed:', $event);
+  }
 }

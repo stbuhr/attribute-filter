@@ -51,8 +51,8 @@
       <mat-spinner></mat-spinner>
     </div>
     } @else {
-    <button mat-button (click)="selectAll()">Alle</button>
-    <button mat-button (click)="selectNone()">Keine</button>
+    <button mat-button (click)="selectAll()" [disabled]="all()">Alle</button>
+    <button mat-button (click)="selectNone()" [disabled]="none()">Keine</button>
     <mat-divider></mat-divider>
     <div class="selection-list">
       @for (attribute of this.attributes(); track attribute.id) {
