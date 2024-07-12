@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
-  OnInit,
   output,
   signal,
 } from '@angular/core';
@@ -15,7 +15,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributePickerService } from './attribute-picker.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'kode-attribute-picker',
@@ -30,6 +29,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatCheckboxModule,
     MatProgressSpinnerModule,
   ],
+  providers: [AttributePickerService],
   templateUrl: './attribute-picker.component.html',
   styleUrl: './attribute-picker.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,8 +47,32 @@ export class AttributePickerComponent {
   all = this.attributePickerService.all;
   none = this.attributePickerService.none;
 
+  lastAttributeIds: string[] = [];
+
   constructor() {
     this.attributePickerService.loadAttributes();
+
+    effect(() => {
+      if (this.attributeIdsHaveChanged(this.attributes().map((a) => a.id))) {
+        this.emitChange();
+      }
+    });
+  }
+
+  attributeIdsHaveChanged(attributeIds: string[]): boolean {
+    if (attributeIds.length !== this.lastAttributeIds.length) {
+      this.lastAttributeIds = attributeIds;
+      return true;
+    }
+
+    for (let i = 0; i < attributeIds.length; i++) {
+      if (attributeIds[i] !== this.lastAttributeIds[i]) {
+        this.lastAttributeIds = attributeIds;
+        return true;
+      }
+    }
+
+    return false;
   }
 
   openPopup() {

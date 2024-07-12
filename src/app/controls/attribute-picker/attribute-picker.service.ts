@@ -22,9 +22,7 @@ export interface AttributePickerState {
 
 const NO_ATTRIBUTE = { id: '', name: '- Kein Attribut -', selected: true };
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AttributePickerService {
   attributesUrl = 'http://localhost:5064/api/customer/allattributes';
 

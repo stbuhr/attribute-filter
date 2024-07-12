@@ -8,4 +8,13 @@
   <kode-attribute-picker
     (change)="selectedAttributesChanged($event)"
   ></kode-attribute-picker>
+  <kode-attribute-picker
+    (change)="selectedAttributesChanged($event)"
+  ></kode-attribute-picker>
 </mat-card>
+
+@for (customer of customers(); track customer.id) {
+<div class="customer-row">
+  <div class="customer-name">{{ customer.name }}</div>
+</div>
+}
