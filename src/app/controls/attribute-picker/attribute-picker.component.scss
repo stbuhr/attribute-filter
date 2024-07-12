@@ -30,7 +30,7 @@
 }
 
 .frame:hover {
-  background-color: var(--control-hover-background-color);
+  background-color: #d0d2db;
 }
 
 .label {
@@ -43,7 +43,7 @@
 .small {
   margin-top: -2px;
   margin-bottom: 4px;
-  font-size: 16px;
+  font-size: 1rem;
   transform: matrix(0.75, 0, 0, 0.75, 0, 4);
   transform-origin: 0px 0px;
 }
